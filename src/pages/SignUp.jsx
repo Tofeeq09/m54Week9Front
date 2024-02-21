@@ -1,9 +1,17 @@
+// import PropTypes from "prop-types";
+import Container from "../components/Container";
+import SignUpForm from "../components/SignUpForm";
+
 const SignUp = () => {
   return (
     <div>
-      <h1>Sign Up</h1>
+      <Container>
+        <SignUpForm />
+      </Container>
     </div>
   );
 };
+
+// SignUp.propTypes = {};
 
 export default SignUp;

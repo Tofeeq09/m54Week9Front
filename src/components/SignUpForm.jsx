@@ -1,54 +1,40 @@
 import { useState } from "react";
+// import PropTypes from "prop-types";
 
 const SignUpForm = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(username, email, password);
-
-    try {
-      const response = await fetch("http://localhost:5001/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, email, password }),
-      });
-
-      if (response.ok) {
-        const userResponse = await response.json();
-        console.log(userResponse);
-      } else {
-        throw new Error("Failed to sign up");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  console.log(form, setForm);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Username:
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        Email:
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        Password:
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      </label>
-      <br />
-      <button type="submit">Sign Up</button>
+    <form className="sign-up-form">
+      <div className="form-field">
+        <label id="username" name="username">
+          Username:
+        </label>
+        <input type="text" name="username" id="username" placeholder="Username" />
+      </div>
+
+      <div className="form-field">
+        <label id="email" name="email">
+          Email:
+        </label>
+        <input type="email" name="email" id="email" placeholder="user@example.com" />
+      </div>
+      <div className="form-field">
+        <label id="password" name="password">
+          Password:
+        </label>
+        <input type="password" name="password" id="password" placeholder="Create a password" />
+      </div>
+      <button type="submit" className="form-btn"></button>
     </form>
   );
 };
+
+// SignUpForm.propTypes = {};
 
 export default SignUpForm;

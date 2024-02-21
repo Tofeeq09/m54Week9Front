@@ -1,45 +1,27 @@
 import { useState } from "react";
 
-const LogInForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const LoginForm = () => {
+  const [form, setForm] = useState({ username: "", password: "" });
+  console.log(form, setForm);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(username, password);
-
-    try {
-      const response = await fetch("http://localhost:5001/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (response.ok) {
-        const userResponse = await response.json();
-        console.log(userResponse);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Username:
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        Password:
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      </label>
-      <br />
-      <button type="submit">Log In</button>
+    <form className="Login-form">
+      <div className="flex flex-col gap-1">
+        <label id="email" name="email">
+          Email:
+        </label>
+        <input type="email" name="email" id="email" placeholder="user@example.com" />
+      </div>
+
+      <div className="form-field">
+        <label id="password" name="password">
+          Password:
+        </label>
+        <input type="password" name="password" id="password" placeholder="Enter your password" />
+      </div>
+      <button type="submit" className="form-btn"></button>
     </form>
   );
 };
 
-export default LogInForm;
+export default LoginForm;

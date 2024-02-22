@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 const LoginForm = () => {
-  const [form, setForm] = useState({ username: "", password: "" });
-  console.log(form, setForm);
+  const [credentials, setCredentials] = useState({ username: "", password: "" });
+  console.log(credentials, setCredentials);
 
   return (
     <form className="Login-form">

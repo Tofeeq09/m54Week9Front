@@ -1,17 +1,24 @@
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import Container from "../components/Container";
 import LoginForm from "../components/LoginForm";
 
-const Login = () => {
+const Login = ({ handleLogin, errorName, errorMessage, user }) => {
   return (
     <div>
-      <Container>
-        <LoginForm />
+      <Container className="container">
+        <h2>Login</h2>
+        <p>Please enter your credentials to login.</p>
+        <LoginForm handleLogin={handleLogin} errorName={errorName} errorMessage={errorMessage} user={user} />
       </Container>
     </div>
   );
 };
 
-// Login.propTypes = {};
+Login.propTypes = {
+  handleLogin: PropTypes.func.isRequired,
+  errorName: PropTypes.string,
+  errorMessage: PropTypes.string,
+  user: PropTypes.object,
+};
 
 export default Login;

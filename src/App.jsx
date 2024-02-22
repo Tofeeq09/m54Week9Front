@@ -60,9 +60,15 @@ const App = () => {
     navigate("/");
   };
 
+  const handleLogout = () => {
+    setUser(null);
+    cookies.remove("authToken");
+    navigate("/");
+  };
+
   return (
     <div className="App">
-      <NavBar />
+      <NavBar user={user} handleLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route

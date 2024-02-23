@@ -46,7 +46,7 @@ export const verifyUser = async () => {
   }
 
   try {
-    const response = await fetch("http://localhost:5001/users/verify", {
+    const response = await fetch("http://localhost:5001/login/verify", {
       method: "GET",
       mode: "cors",
       headers: {

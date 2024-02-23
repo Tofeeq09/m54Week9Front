@@ -72,13 +72,13 @@ const App = () => {
     }
 
     setUser(data.user);
-    cookies.set("authToken", data.token);
+    cookies.set("token", data.token);
     navigate("/");
   };
 
   const handleLogout = () => {
     setUser(null);
-    cookies.remove("authToken");
+    cookies.remove("token");
     navigate("/");
   };
 

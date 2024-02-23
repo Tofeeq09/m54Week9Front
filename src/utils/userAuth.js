@@ -1,3 +1,7 @@
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
+
 export const signUpFetch = async (credentials) => {
   const response = await fetch("http://localhost:5001/api/signup", {
     method: "POST",
@@ -12,6 +16,7 @@ export const signUpFetch = async (credentials) => {
   }
 
   const data = await response.json();
+  cookies.set("token", data.token); // Set the token in the cookies
   return data;
 };
 
@@ -26,7 +31,7 @@ export const loginFetch = async (credentials) => {
     });
 
     const data = await response.json();
-
+    cookies.set("token", data.token); // Set the token in the cookies
     return data;
   } catch (error) {
     return error;
@@ -34,6 +39,12 @@ export const loginFetch = async (credentials) => {
 };
 
 export const verifyUser = async () => {
+  const token = cookies.get("token");
+
+  if (!token) {
+    return { success: false, error: "No token found" };
+  }
+
   try {
     const response = await fetch("http://localhost:5001/users/verify", {
       method: "GET",
@@ -41,6 +52,7 @@ export const verifyUser = async () => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "http://localhost:5001",
+        Authorization: `Bearer ${token}`, // Add this line
       },
       credentials: "include",
     });

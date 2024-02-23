@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Container from "./Container";
-import { IoMdLogIn } from "react-icons/io";
-import { AiOutlineLogout } from "react-icons/ai";
+import { MdOutlineLogin } from "react-icons/md";
+import { MdOutlineLogout } from "react-icons/md";
 import { GrUserNew } from "react-icons/gr";
 import "./NavBar.css";
 
@@ -18,14 +18,14 @@ const NavBar = ({ user, handleLogout }) => {
             <div />
             <h1>{user.username}</h1>
             <button onClick={handleLogout}>
-              Logout <AiOutlineLogout />
+              Logout <MdOutlineLogout />
             </button>
           </div>
         ) : (
           <div>
             <Link to="/login" className="link-button">
               Login
-              <IoMdLogIn />
+              <MdOutlineLogin />
             </Link>
             <Link to="/signup" className="link-button">
               Sign Up <GrUserNew />

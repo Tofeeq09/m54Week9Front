@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { signUpFetch, loginFetch } from "./utils/userAuth";
@@ -12,32 +12,46 @@ import SignUp from "./pages/SignUp";
 import LogIn from "./pages/Login";
 import Books from "./pages/Books";
 import Account from "./pages/Account";
+import { verifyUser } from "./utils/userAuth";
 
 const App = () => {
-  const [user, setUser] = useState(null);
-  const cookies = new Cookies();
   const navigate = useNavigate();
+  const cookies = new Cookies();
+  const [user, setUser] = useState(null);
   const [errorName, setErrorName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    // For persistent user login, sends request to backend to verify jwt token
+    const fetchUser = async () => {
+      const data = await verifyUser();
+
+      if (!data.success) {
+        return;
+      }
+
+      setUser(data.user);
+    };
+
+    fetchUser();
+  }, [navigate]);
 
   const handleLogin = async (e, credentials) => {
     e.preventDefault();
 
     const data = await loginFetch(credentials);
 
-    if (data.error) {
-      console.log(data);
-      setErrorName(data.error.name);
-      setErrorMessage(data.error.message);
+    if (!data.success) {
+      setErrorName(data.name);
+      setErrorMessage(data.message);
       setTimeout(() => {
         setErrorName("");
         setErrorMessage("");
       }, 3000);
-      return;
     }
 
     setUser(data.user);
-    cookies.set("authToken", data.user.token);
+    cookies.set("authToken", data.token);
     navigate("/");
   };
 
@@ -46,10 +60,10 @@ const App = () => {
 
     const data = await signUpFetch(credentials);
 
-    if (data.error) {
+    if (!data.success) {
       console.log(data);
-      setErrorName(data.error.name);
-      setErrorMessage(data.error.message);
+      setErrorName(data.name);
+      setErrorMessage(data.message);
       setTimeout(() => {
         setErrorName("");
         setErrorMessage("");
@@ -57,6 +71,8 @@ const App = () => {
       return;
     }
 
+    setUser(data.user);
+    cookies.set("authToken", data.token);
     navigate("/");
   };
 

@@ -14,12 +14,28 @@ const EditUserModal = ({ toggle, action, token, username, triggerUpdate, updateU
     if (event.target.password.value) updatedUser.password = event.target.password.value;
 
     try {
-      const updatedUserData = await updateUserByUsername(token, username, updatedUser);
+      const { response, data } = await updateUserByUsername(token, username, updatedUser);
       action();
-      triggerUpdate();
 
-      // Update the username in the state
-      updateUsername(updatedUserData.username);
+      switch (response.status) {
+        case 200:
+          triggerUpdate();
+          updateUsername(data.username);
+          window.alert(data.message);
+          break;
+        case 400:
+        case 401:
+        case 404:
+          window.alert(data.message);
+          break;
+        case 500:
+        case 501:
+          window.alert(`Error: ${data.error.name}, Message: ${data.error.message}`);
+          break;
+        default:
+          window.alert("An unknown error occurred");
+          break;
+      }
     } catch (err) {
       setError(err);
     }

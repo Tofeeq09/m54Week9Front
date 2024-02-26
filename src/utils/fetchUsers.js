@@ -63,7 +63,7 @@ export const updateUserByUsername = async (token, username, updatedUser) => {
   });
 
   const data = await response.json();
-  return data;
+  return { response, data };
 };
 
 export const deleteUserByUsername = async (token, username, deletedUser) => {
@@ -77,6 +77,5 @@ export const deleteUserByUsername = async (token, username, deletedUser) => {
   });
 
   const data = await response.json();
-
   return { response, data };
 };

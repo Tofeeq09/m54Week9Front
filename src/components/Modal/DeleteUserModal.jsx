@@ -24,23 +24,21 @@ function DeleteUserModal({ toggle, action, token, username, handleLogout }) {
           window.alert(data.message);
           break;
         case 400:
-          window.alert(data.message);
-          break;
         case 401:
-          window.alert(data.message);
-          break;
         case 404:
           window.alert(data.message);
           break;
         case 500:
-          window.alert(data.error);
-          break;
         case 501:
-          window.alert(data.error);
+          window.alert(`Error: ${data.error.name}, Message: ${data.error.message}`);
+          break;
+        default:
+          window.alert("An unknown error occurred");
           break;
       }
     } catch (err) {
       setError(err);
+      window.alert("An error occurred while deleting the user");
     }
   };
 

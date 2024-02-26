@@ -77,5 +77,6 @@ export const deleteUserByUsername = async (token, username, deletedUser) => {
   });
 
   const data = await response.json();
-  return data;
+
+  return { response, data };
 };

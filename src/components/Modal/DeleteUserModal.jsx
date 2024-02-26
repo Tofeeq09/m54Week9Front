@@ -15,9 +15,30 @@ function DeleteUserModal({ toggle, action, token, username, handleLogout }) {
     };
 
     try {
-      await deleteUserByUsername(token, username, deletedUser);
+      const { response, data } = await deleteUserByUsername(token, username, deletedUser);
       action();
-      handleLogout();
+
+      switch (response.status) {
+        case 200:
+          handleLogout();
+          window.alert(data.message);
+          break;
+        case 400:
+          window.alert(data.message);
+          break;
+        case 401:
+          window.alert(data.message);
+          break;
+        case 404:
+          window.alert(data.message);
+          break;
+        case 500:
+          window.alert(data.error);
+          break;
+        case 501:
+          window.alert(data.error);
+          break;
+      }
     } catch (err) {
       setError(err);
     }
@@ -45,7 +66,7 @@ function DeleteUserModal({ toggle, action, token, username, handleLogout }) {
             <input type="password" name="password" className="form-field" placeholder="Password" />
           </div>
           <button type="submit" className="form-btn">
-            Save
+            DELETE
           </button>
         </form>
       </div>

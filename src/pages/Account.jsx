@@ -5,7 +5,7 @@ import { getUserByUsername, getUserDetailsByUsername } from "../utils/fetchUsers
 import EditUserModal from "../components/Modal/EditUserModal";
 import DeleteUserModal from "../components/Modal/DeleteUserModal";
 
-const Account = ({ loggedInUser, updateUsername }) => {
+const Account = ({ loggedInUser, updateUsername, handleLogout }) => {
   const { username } = useParams();
   const [viewedUser, setViewedUser] = useState(null); // The data of the user being viewed
   const [error, setError] = useState(null); // Error state
@@ -81,12 +81,12 @@ const Account = ({ loggedInUser, updateUsername }) => {
           <button className="toggleDeleteModal" onClick={openDeleteModal}>
             DELETE ACCOUNT
           </button>
-          <EditUserModal
+          <DeleteUserModal
             toggle={deleteModalState}
             action={openDeleteModal}
             token={loggedInUser.token}
             username={viewedUser.username}
-            updateUsername={updateUsername}
+            handleLogout={handleLogout}
           />
         </div>
       </div>
@@ -108,6 +108,7 @@ Account.propTypes = {
     token: PropTypes.string,
   }),
   updateUsername: PropTypes.func,
+  handleLogout: PropTypes.func,
 };
 
 export default Account;

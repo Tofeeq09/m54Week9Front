@@ -32,19 +32,20 @@ const EditUserModal = ({ toggle, action, token, username, triggerUpdate, updateU
         {error && <p>{error.message}</p>}
         <form onSubmit={handleSubmit}>
           <h2>Edit User Details</h2>
+          <p>Update your user details below:</p>
           <div className="form-field">
             <label htmlFor="username">Username:</label>
-            <input type="text" name="username" id="username" placeholder="Username" />
+            <input type="text" name="username" className="form-field" placeholder="Username" />
           </div>
 
           <div className="form-field">
             <label htmlFor="email">Email:</label>
-            <input type="email" name="email" id="email" placeholder="email" />
+            <input type="email" name="email" className="form-field" placeholder="email" />
           </div>
 
           <div className="form-field">
             <label htmlFor="password">Password:</label>
-            <input type="password" name="password" id="password" placeholder="Password" />
+            <input type="password" name="password" className="form-field" placeholder="Password" />
           </div>
           <button type="submit" className="form-btn">
             Save

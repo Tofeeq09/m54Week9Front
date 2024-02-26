@@ -78,7 +78,10 @@ const App = () => {
         <Route path="/" element={<Dashboard user={user} />} />
         <Route path="/signup" element={<SignUp error={error} handleSignUp={handleSignUp} user={user} />} />
         <Route path="/login" element={<LogIn error={error} handleLogin={handleLogin} user={user} />} />
-        <Route path="/users/:username" element={<Account loggedInUser={user} updateUsername={updateUsername} />} />
+        <Route
+          path="/users/:username"
+          element={<Account loggedInUser={user} updateUsername={updateUsername} handleLogout={handleLogout} />}
+        />
         <Route path="/books/:id" element={<Books />} />
       </Routes>
       <Footer />

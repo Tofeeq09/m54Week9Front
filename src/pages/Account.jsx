@@ -1,28 +1,45 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { getUserByUsername } from "../utils/fetchUsers";
+import { getUserByUsername, getUserDetailsByUsername } from "../utils/fetchUsers";
 
 const Account = ({ loggedInUser }) => {
   const { username } = useParams();
   const [viewedUser, setViewedUser] = useState(null); // The data of the user being viewed
+  const [error, setError] = useState(null); // Error state
 
   useEffect(() => {
     const fetchUser = async () => {
-      console.log(username); // log the username
-      const data = await getUserByUsername(username);
-      console.log(data); // log the user data
-      setViewedUser(data);
+      try {
+        let data;
+        if (username === loggedInUser.username) {
+          data = await getUserDetailsByUsername(loggedInUser.token, username);
+        } else {
+          data = await getUserByUsername(username);
+        }
+        setViewedUser(data);
+      } catch (err) {
+        setError(err.message);
+      }
     };
 
     fetchUser();
-  }, [username]);
+  }, [username, loggedInUser]);
+
+  if (error) {
+    return (
+      <div>
+        <h1>Account</h1>
+        <p>{error}</p>
+      </div>
+    );
+  }
 
   if (!viewedUser) {
     return (
       <div>
         <h1>Account</h1>
-        <p>Loading...</p>
+        <p>Loading user...</p>
       </div>
     );
   }
@@ -33,10 +50,11 @@ const Account = ({ loggedInUser }) => {
         <h1>Welcome, {viewedUser.username}!</h1>
         <div>
           <h2>Private Information</h2>
-          <p>Username: {loggedInUser.username}</p>
-          <p>Email: {loggedInUser.email}</p>
-          <p>Password: *****</p>
+          <p>Username: {viewedUser.username}</p>
+          <p>Email: {viewedUser.email}</p>
+          <p>Password: ********</p>
           <button>Change Information</button>
+          <button>DELETE ACCOUNT</button>
         </div>
       </div>
     );
@@ -54,6 +72,7 @@ Account.propTypes = {
   loggedInUser: PropTypes.shape({
     username: PropTypes.string,
     email: PropTypes.string,
+    token: PropTypes.string,
   }),
 };
 

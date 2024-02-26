@@ -35,7 +35,6 @@ const Dashboard = ({ user }) => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />{" "}
-      {/* add an input field for the search term */}
       {!users.length ? <div>Loading...</div> : users.map((user) => <UserCard key={user.id} user={user} />)}
     </div>
   );

@@ -3,17 +3,22 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { getUserByUsername, getUserDetailsByUsername } from "../utils/fetchUsers";
 import EditUserModal from "../components/Modal/EditUserModal";
-import "./Account.css";
+import DeleteUserModal from "../components/Modal/DeleteUserModal";
 
 const Account = ({ loggedInUser, updateUsername }) => {
   const { username } = useParams();
   const [viewedUser, setViewedUser] = useState(null); // The data of the user being viewed
   const [error, setError] = useState(null); // Error state
-  const [modalState, setModalState] = useState(false); // State for the modal
+  const [editModalState, setEditModalState] = useState(false); // State for the modal
+  const [deleteModalState, setDeleteModalState] = useState(false); // State for the modal
   const [updateTrigger, setUpdateTrigger] = useState(false); // State to trigger a re-fetch of the user data
 
-  const openModal = () => {
-    setModalState(!modalState);
+  const openEditModal = () => {
+    setEditModalState(!editModalState);
+  };
+
+  const openDeleteModal = () => {
+    setDeleteModalState(!deleteModalState);
   };
 
   useEffect(() => {
@@ -62,19 +67,27 @@ const Account = ({ loggedInUser, updateUsername }) => {
           <p>Username: {viewedUser.username}</p>
           <p>Email: {viewedUser.email}</p>
           <p>Password: ********</p>
-          <button className="toggleModal" onClick={openModal}>
+          <button className="toggleEditModal" onClick={openEditModal}>
             Change Information
           </button>
           <EditUserModal
-            toggle={modalState}
-            action={openModal}
+            toggle={editModalState}
+            action={openEditModal}
             token={loggedInUser.token}
             username={viewedUser.username}
             triggerUpdate={() => setUpdateTrigger(!updateTrigger)}
-            viewedUser={viewedUser}
             updateUsername={updateUsername}
           />
-          <button>DELETE ACCOUNT</button>
+          <button className="toggleDeleteModal" onClick={openDeleteModal}>
+            DELETE ACCOUNT
+          </button>
+          <EditUserModal
+            toggle={deleteModalState}
+            action={openDeleteModal}
+            token={loggedInUser.token}
+            username={viewedUser.username}
+            updateUsername={updateUsername}
+          />
         </div>
       </div>
     );

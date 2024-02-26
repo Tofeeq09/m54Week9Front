@@ -65,3 +65,17 @@ export const updateUserByUsername = async (token, username, updatedUser) => {
   const data = await response.json();
   return data;
 };
+
+export const deleteUserByUsername = async (token, username, updatedUser) => {
+  const response = await fetch(`http://localhost:5001/api/users/${username}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(updatedUser),
+  });
+
+  const data = await response.json();
+  return data;
+};

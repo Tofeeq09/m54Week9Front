@@ -2,13 +2,13 @@ import { useState } from "react";
 import { updateUserByUsername } from "../../utils/fetchUsers";
 import PropTypes from "prop-types";
 
-const EditUserModal = ({ toggle, action, token, username, triggerUpdate, viewedUser, updateUsername }) => {
+const EditUserModal = ({ toggle, action, token, username, triggerUpdate, updateUsername }) => {
   const [error, setError] = useState(null); // Error state
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const updatedUser = { username: viewedUser.username };
+    const updatedUser = { username: username };
     if (event.target.username.value) updatedUser.username = event.target.username.value;
     if (event.target.email.value) updatedUser.email = event.target.email.value;
     if (event.target.password.value) updatedUser.password = event.target.password.value;
@@ -61,7 +61,6 @@ EditUserModal.propTypes = {
   toggle: PropTypes.bool,
   action: PropTypes.func,
   triggerUpdate: PropTypes.func,
-  viewedUser: PropTypes.object,
   updateUsername: PropTypes.func,
 };
 

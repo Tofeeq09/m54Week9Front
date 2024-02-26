@@ -17,7 +17,8 @@ const App = () => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [user, setUser] = useState(null);
-  const [error, setError] = useState(null);
+  const [errorName, setErrorName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -33,21 +34,18 @@ const App = () => {
     fetchUser();
   }, [navigate, cookies]);
 
-  const clearError = () => {
-    setTimeout(() => {
-      setError(null);
-    }, 3000);
-  };
-
   const handleLogin = async (e, credentials) => {
     e.preventDefault();
 
     const data = await login(credentials);
 
     if (!data.success) {
-      setError(data);
-      clearError();
-      return;
+      setErrorName(data.name);
+      setErrorMessage(data.message);
+      setTimeout(() => {
+        setErrorName("");
+        setErrorMessage("");
+      }, 3000);
     }
 
     setUser(data.user);
@@ -61,8 +59,12 @@ const App = () => {
     const data = await signUp(credentials);
 
     if (!data.success) {
-      setError(data);
-      clearError();
+      setErrorName(data.name);
+      setErrorMessage(data.message);
+      setTimeout(() => {
+        setErrorName("");
+        setErrorMessage("");
+      }, 3000);
       return;
     }
 
@@ -82,8 +84,14 @@ const App = () => {
       <NavBar user={user} handleLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<Dashboard user={user} />} />
-        <Route path="/signup" element={<SignUp error={error} handleSignUp={handleSignUp} user={user} />} />
-        <Route path="/login" element={<LogIn error={error} handleLogin={handleLogin} user={user} />} />
+        <Route
+          path="/signup"
+          element={<SignUp errorName={errorName} errorMessage={errorMessage} handleSignUp={handleSignUp} user={user} />}
+        />
+        <Route
+          path="/login"
+          element={<LogIn errorName={errorName} errorMessage={errorMessage} handleLogin={handleLogin} user={user} />}
+        />
         <Route path="/users/:username" element={<Account loggedInUser={user} />} />
         <Route path="/books/:id" element={<Books />} />
       </Routes>

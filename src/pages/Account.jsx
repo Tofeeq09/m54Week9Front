@@ -2,11 +2,16 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { getUserByUsername, getUserDetailsByUsername } from "../utils/fetchUsers";
+import EditUserModal from "../components/EditUserModal";
 
 const Account = ({ loggedInUser }) => {
   const { username } = useParams();
   const [viewedUser, setViewedUser] = useState(null); // The data of the user being viewed
   const [error, setError] = useState(null); // Error state
+  const [modalOpen, setModalOpen] = useState(false); // State for modal
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -53,7 +58,13 @@ const Account = ({ loggedInUser }) => {
           <p>Username: {viewedUser.username}</p>
           <p>Email: {viewedUser.email}</p>
           <p>Password: ********</p>
-          <button>Change Information</button>
+          <button onClick={openModal}>Change Information</button>
+          <EditUserModal
+            show={modalOpen}
+            handleClose={closeModal}
+            token={loggedInUser.token}
+            username={viewedUser.username}
+          />
           <button>DELETE ACCOUNT</button>
         </div>
       </div>

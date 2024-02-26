@@ -2,8 +2,8 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { signUpFetch, loginFetch } from "./utils/userAuth";
-import Cookies from "universal-cookie";
+import { useCookies } from "react-cookie";
+import { signUp, login, verifyUser } from "./utils/userAuth";
 
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
@@ -12,19 +12,16 @@ import SignUp from "./pages/SignUp";
 import LogIn from "./pages/Login";
 import Books from "./pages/Books";
 import Account from "./pages/Account";
-import { verifyUser } from "./utils/userAuth";
 
 const App = () => {
   const navigate = useNavigate();
-  const cookies = new Cookies();
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [user, setUser] = useState(null);
-  const [errorName, setErrorName] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // For persistent user login, sends request to backend to verify jwt token
     const fetchUser = async () => {
-      const data = await verifyUser();
+      const data = await verifyUser(cookies);
 
       if (!data.success) {
         return;
@@ -34,51 +31,49 @@ const App = () => {
     };
 
     fetchUser();
-  }, [navigate]);
+  }, [navigate, cookies]);
+
+  const clearError = () => {
+    setTimeout(() => {
+      setError(null);
+    }, 3000);
+  };
 
   const handleLogin = async (e, credentials) => {
     e.preventDefault();
 
-    const data = await loginFetch(credentials);
+    const data = await login(credentials);
 
     if (!data.success) {
-      setErrorName(data.name);
-      setErrorMessage(data.message);
-      setTimeout(() => {
-        setErrorName("");
-        setErrorMessage("");
-      }, 3000);
+      setError(data);
+      clearError();
+      return;
     }
 
     setUser(data.user);
-    cookies.set("authToken", data.token);
+    setCookie("token", data.token);
     navigate("/");
   };
 
   const handleSignUp = async (e, credentials) => {
     e.preventDefault();
 
-    const data = await signUpFetch(credentials);
+    const data = await signUp(credentials);
 
     if (!data.success) {
-      console.log(data);
-      setErrorName(data.name);
-      setErrorMessage(data.message);
-      setTimeout(() => {
-        setErrorName("");
-        setErrorMessage("");
-      }, 3000);
+      setError(data);
+      clearError();
       return;
     }
 
     setUser(data.user);
-    cookies.set("token", data.token);
+    setCookie("token", data.token);
     navigate("/");
   };
 
   const handleLogout = () => {
     setUser(null);
-    cookies.remove("token");
+    removeCookie("token");
     navigate("/");
   };
 
@@ -86,17 +81,11 @@ const App = () => {
     <div className="App">
       <NavBar user={user} handleLogout={handleLogout} />
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route
-          path="/signup"
-          element={<SignUp errorName={errorName} errorMessage={errorMessage} handleSignUp={handleSignUp} user={user} />}
-        />
-        <Route
-          path="/login"
-          element={<LogIn errorName={errorName} errorMessage={errorMessage} handleLogin={handleLogin} user={user} />}
-        />
+        <Route path="/" element={<Dashboard user={user} />} />
+        <Route path="/signup" element={<SignUp error={error} handleSignUp={handleSignUp} user={user} />} />
+        <Route path="/login" element={<LogIn error={error} handleLogin={handleLogin} user={user} />} />
+        <Route path="/users/:username" element={<Account loggedInUser={user} />} />
         <Route path="/books/:id" element={<Books />} />
-        <Route path="/users" element={<Account />} />
       </Routes>
       <Footer />
     </div>

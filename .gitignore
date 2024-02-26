@@ -23,5 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# OS or Editor files
-.eslintrc
+
+.env
+.env.local

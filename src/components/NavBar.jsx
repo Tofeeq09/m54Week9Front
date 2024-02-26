@@ -16,19 +16,21 @@ const NavBar = ({ user, handleLogout }) => {
         {user ? (
           <div>
             <div />
-            <h1>{user.username}</h1>
+            <Link to={`/users/${user.username}`} className="link-button">
+              {user.username}
+            </Link>
             <button onClick={handleLogout}>
               Logout <MdOutlineLogout />
             </button>
           </div>
         ) : (
           <div>
+            <Link to="/signup" className="link-button">
+              Sign Up <GrUserNew />
+            </Link>
             <Link to="/login" className="link-button">
               Login
               <MdOutlineLogin />
-            </Link>
-            <Link to="/signup" className="link-button">
-              Sign Up <GrUserNew />
             </Link>
           </div>
         )}

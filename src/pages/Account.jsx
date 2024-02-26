@@ -2,16 +2,19 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { getUserByUsername, getUserDetailsByUsername } from "../utils/fetchUsers";
-import EditUserModal from "../components/EditUserModal";
+import EditUserModal from "../components/Modal/EditUserModal";
+import "./Account.css";
 
-const Account = ({ loggedInUser }) => {
+const Account = ({ loggedInUser, updateUsername }) => {
   const { username } = useParams();
   const [viewedUser, setViewedUser] = useState(null); // The data of the user being viewed
   const [error, setError] = useState(null); // Error state
-  const [modalOpen, setModalOpen] = useState(false); // State for modal
+  const [modalState, setModalState] = useState(false); // State for the modal
+  const [updateTrigger, setUpdateTrigger] = useState(false); // State to trigger a re-fetch of the user data
 
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+  const openModal = () => {
+    setModalState(!modalState);
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -23,19 +26,20 @@ const Account = ({ loggedInUser }) => {
           data = await getUserByUsername(username);
         }
         setViewedUser(data);
-      } catch (err) {
-        setError(err.message);
+      } catch (error) {
+        setError(error);
       }
     };
 
     fetchUser();
-  }, [username, loggedInUser]);
+  }, [username, loggedInUser, updateTrigger]);
 
   if (error) {
     return (
       <div>
         <h1>Account</h1>
-        <p>{error}</p>
+        {error && <p>{error.name}</p>}
+        {error && <p>{error.message}</p>}
       </div>
     );
   }
@@ -51,19 +55,24 @@ const Account = ({ loggedInUser }) => {
 
   if (username === loggedInUser.username) {
     return (
-      <div>
+      <div className="account">
         <h1>Welcome, {viewedUser.username}!</h1>
         <div>
           <h2>Private Information</h2>
           <p>Username: {viewedUser.username}</p>
           <p>Email: {viewedUser.email}</p>
           <p>Password: ********</p>
-          <button onClick={openModal}>Change Information</button>
+          <button className="toggleModal" onClick={openModal}>
+            Change Information
+          </button>
           <EditUserModal
-            show={modalOpen}
-            handleClose={closeModal}
+            toggle={modalState}
+            action={openModal}
             token={loggedInUser.token}
             username={viewedUser.username}
+            triggerUpdate={() => setUpdateTrigger(!updateTrigger)}
+            viewedUser={viewedUser}
+            updateUsername={updateUsername}
           />
           <button>DELETE ACCOUNT</button>
         </div>
@@ -72,7 +81,7 @@ const Account = ({ loggedInUser }) => {
   }
 
   return (
-    <div>
+    <div className="account">
       <h1>{viewedUser.username}</h1>
       <p>Username: {viewedUser.username}</p>
     </div>
@@ -85,6 +94,7 @@ Account.propTypes = {
     email: PropTypes.string,
     token: PropTypes.string,
   }),
+  updateUsername: PropTypes.func,
 };
 
 export default Account;

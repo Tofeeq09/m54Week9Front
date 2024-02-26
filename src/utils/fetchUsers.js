@@ -9,10 +9,6 @@ export const getAllUsers = async (token, searchTerm) => {
       },
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
     const data = await response.json();
 
     return data;
@@ -29,10 +25,6 @@ export const getUserByUsername = async (username) => {
         "Content-Type": "application/json",
       },
     });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
 
     const data = await response.json();
 
@@ -52,10 +44,6 @@ export const getUserDetailsByUsername = async (token, username) => {
       },
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
     const data = await response.json();
 
     return data;
@@ -65,24 +53,15 @@ export const getUserDetailsByUsername = async (token, username) => {
 };
 
 export const updateUserByUsername = async (token, username, updatedUser) => {
-  try {
-    const response = await fetch(`http://localhost:5001/api/users/${username}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(updatedUser),
-    });
+  const response = await fetch(`http://localhost:5001/api/users/${username}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(updatedUser),
+  });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    return error;
-  }
+  const data = await response.json();
+  return data;
 };

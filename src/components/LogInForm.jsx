@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const LoginForm = ({ handleLogin, errorName, errorMessage }) => {
+const LoginForm = ({ handleLogin, error }) => {
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -21,8 +21,8 @@ const LoginForm = ({ handleLogin, errorName, errorMessage }) => {
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
-      {errorName && <p>{errorName}</p>}
-      {errorMessage && <p>{errorMessage}</p>}
+      {error && <p>{error.name}</p>}
+      {error && <p>{error.message}</p>}
       <div className="form-field">
         <label htmlFor="email">Email:</label>
         <input
@@ -56,8 +56,10 @@ const LoginForm = ({ handleLogin, errorName, errorMessage }) => {
 
 LoginForm.propTypes = {
   handleLogin: PropTypes.func.isRequired,
-  errorName: PropTypes.string,
-  errorMessage: PropTypes.string,
+  error: PropTypes.shape({
+    name: PropTypes.string,
+    message: PropTypes.string,
+  }),
 };
 
 export default LoginForm;

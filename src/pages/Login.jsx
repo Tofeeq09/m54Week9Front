@@ -2,13 +2,13 @@ import PropTypes from "prop-types";
 import Container from "../components/Container";
 import LoginForm from "../components/LoginForm";
 
-const Login = ({ handleLogin, errorName, errorMessage, user }) => {
+const Login = ({ handleLogin, error, user }) => {
   return (
     <div>
       <Container className="container">
         <h2>Login</h2>
         <p>Please enter your credentials to login.</p>
-        <LoginForm handleLogin={handleLogin} errorName={errorName} errorMessage={errorMessage} user={user} />
+        <LoginForm handleLogin={handleLogin} error={error} user={user} />
       </Container>
     </div>
   );
@@ -16,8 +16,7 @@ const Login = ({ handleLogin, errorName, errorMessage, user }) => {
 
 Login.propTypes = {
   handleLogin: PropTypes.func.isRequired,
-  errorName: PropTypes.string,
-  errorMessage: PropTypes.string,
+  error: PropTypes.object,
   user: PropTypes.object,
 };
 

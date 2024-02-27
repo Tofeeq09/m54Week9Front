@@ -9,6 +9,10 @@ export const signUp = async (credentials) => {
       body: JSON.stringify(credentials),
     });
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
     return { response, data };
   } catch (error) {
@@ -27,8 +31,12 @@ export const login = async (credentials) => {
       body: JSON.stringify(credentials),
     });
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
-    return data;
+    return { response, data };
   } catch (error) {
     return error;
   }
@@ -47,9 +55,13 @@ export const verifyUser = async (cookies) => {
       credentials: "include",
     });
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
 
-    return data;
+    return { response, data };
   } catch (error) {
     return { success: false, error: error.message };
   }

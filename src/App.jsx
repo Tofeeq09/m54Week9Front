@@ -43,8 +43,8 @@ const App = () => {
 
   const handleLogin = async (e, credentials) => {
     e.preventDefault();
-    const data = await login(credentials);
-    if (!data.success) {
+    const { response, data } = await login(credentials);
+    if (!response.ok) {
       setError({ name: data.name, message: data.message });
       clearError();
     }
@@ -55,9 +55,9 @@ const App = () => {
 
   const handleSignUp = async (e, credentials) => {
     e.preventDefault();
-    const { response, data } = await signUp(credentials);
+    const data = await signUp(credentials);
 
-    switch (response.status) {
+    switch (data.response.status) {
       case 201:
         setUser(data.user);
         setCookie("token", data.user.token);
@@ -66,11 +66,13 @@ const App = () => {
       case 400:
       case 401:
       case 404:
-        setError({ name: data.name, message: data.message });
+        window.alert(data.message);
+        setError({ message: data.message });
         clearError();
         break;
       case 500:
       case 501:
+        window.alert(`Error: ${data.error.name}, Message: ${data.error.message}`);
         setError({ name: data.error.name, message: data.error.message });
         clearError();
         break;
@@ -98,7 +100,7 @@ const App = () => {
           path="/users/:username"
           element={<Account loggedInUser={user} updateUsername={updateUsername} handleLogout={handleLogout} />}
         />
-        <Route path="/books/:id" element={<Books user={user} />} />
+        <Route path="/books" element={<Books user={user} />} />
       </Routes>
       <Footer />
     </div>

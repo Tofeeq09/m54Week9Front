@@ -55,9 +55,10 @@ const App = () => {
 
   const handleSignUp = async (e, credentials) => {
     e.preventDefault();
-    const data = await signUp(credentials);
+    const result = await signUp(credentials);
+    const { response, data } = result;
 
-    switch (data.response.status) {
+    switch (response.status) {
       case 201:
         setUser(data.user);
         setCookie("token", data.user.token);

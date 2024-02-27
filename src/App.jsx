@@ -58,7 +58,7 @@ const App = () => {
     const { response, data } = await signUp(credentials);
 
     switch (response.status) {
-      case 200:
+      case 201:
         setUser(data.user);
         setCookie("token", data.user.token);
         navigate("/");

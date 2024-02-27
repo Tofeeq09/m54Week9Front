@@ -9,12 +9,8 @@ export const signUp = async (credentials) => {
       body: JSON.stringify(credentials),
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
     const data = await response.json();
-    return data;
+    return { response, data };
   } catch (error) {
     return error;
   }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { addBookToUserLibrary } from "../utils/fetchBooks";
+import { addBookToUserLibrary, removeBookFromUserLibrary } from "../utils/fetchBooks";
 
 const BookCard = ({ book, token, username }) => {
   const [isAdded, setIsAdded] = useState(false);
@@ -22,8 +22,25 @@ const BookCard = ({ book, token, username }) => {
     }
   };
 
-  const removeBook = () => {
-    setIsAdded(false);
+  const removeBook = async () => {
+    try {
+      const { response, data } = await removeBookFromUserLibrary(token, username, book.title);
+      switch (response.status) {
+        case 200:
+          setIsAdded(false);
+          window.alert(data.message);
+          break;
+        case 500:
+        case 501:
+          window.alert(`Error: ${data.error.name}, Message: ${data.error.message}`);
+          break;
+        default:
+          window.alert("An unknown error occurred");
+          break;
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

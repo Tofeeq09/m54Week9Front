@@ -1,9 +1,13 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { getUserByUsername, getUserDetailsByUsername } from "../utils/fetchUsers";
+
 import EditUserModal from "../components/Modal/EditUserModal";
 import DeleteUserModal from "../components/Modal/DeleteUserModal";
+import UserBookCard from "../components/UserBookCard";
+
+import { getUserByUsername, getUserDetailsByUsername } from "../utils/fetchUsers";
+import { getUserBooks } from "../utils/fetchBooks";
 
 const Account = ({ loggedInUser, updateUsername, handleLogout }) => {
   const { username } = useParams();
@@ -12,6 +16,7 @@ const Account = ({ loggedInUser, updateUsername, handleLogout }) => {
   const [editModalState, setEditModalState] = useState(false); // State for the modal
   const [deleteModalState, setDeleteModalState] = useState(false); // State for the modal
   const [updateTrigger, setUpdateTrigger] = useState(false); // State to trigger a re-fetch of the user data
+  const [books, setBooks] = useState([]);
 
   const openEditModal = () => {
     setEditModalState(!editModalState);
@@ -38,6 +43,15 @@ const Account = ({ loggedInUser, updateUsername, handleLogout }) => {
 
     fetchUser();
   }, [username, loggedInUser, updateTrigger]);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const books = await getUserBooks(loggedInUser.token, loggedInUser.username);
+      setBooks(books);
+    };
+
+    fetchBooks();
+  }, [loggedInUser.token, loggedInUser.username]);
 
   if (error) {
     return (
@@ -88,6 +102,11 @@ const Account = ({ loggedInUser, updateUsername, handleLogout }) => {
             username={viewedUser.username}
             handleLogout={handleLogout}
           />
+          <div>
+            {books.map((book) => (
+              <UserBookCard key={book.title} book={book} />
+            ))}
+          </div>
         </div>
       </div>
     );

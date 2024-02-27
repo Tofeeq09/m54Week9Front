@@ -55,7 +55,7 @@ const LoginForm = ({ handleLogin, error }) => {
 };
 
 LoginForm.propTypes = {
-  handleLogin: PropTypes.func.isRequired,
+  handleLogin: PropTypes.func,
   error: PropTypes.shape({
     name: PropTypes.string,
     message: PropTypes.string,

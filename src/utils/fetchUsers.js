@@ -53,29 +53,37 @@ export const getUserDetailsByUsername = async (token, username) => {
 };
 
 export const updateUserByUsername = async (token, username, updatedUser) => {
-  const response = await fetch(`http://localhost:5001/api/users/${username}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(updatedUser),
-  });
+  try {
+    const response = await fetch(`http://localhost:5001/api/users/${username}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedUser),
+    });
 
-  const data = await response.json();
-  return { response, data };
+    const data = await response.json();
+    return { response, data };
+  } catch (error) {
+    return error;
+  }
 };
 
 export const deleteUserByUsername = async (token, username, deletedUser) => {
-  const response = await fetch(`http://localhost:5001/api/users/${username}`, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(deletedUser),
-  });
+  try {
+    const response = await fetch(`http://localhost:5001/api/users/${username}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(deletedUser),
+    });
 
-  const data = await response.json();
-  return { response, data };
+    const data = await response.json();
+    return { response, data };
+  } catch (error) {
+    return error;
+  }
 };

@@ -55,14 +55,30 @@ const App = () => {
 
   const handleSignUp = async (e, credentials) => {
     e.preventDefault();
-    const data = await signUp(credentials);
-    if (!data.success) {
-      setError({ name: data.name, message: data.message });
-      clearError();
+    const { response, data } = await signUp(credentials);
+
+    switch (response.status) {
+      case 200:
+        setUser(data.user);
+        setCookie("token", data.user.token);
+        navigate("/");
+        break;
+      case 400:
+      case 401:
+      case 404:
+        setError({ name: data.name, message: data.message });
+        clearError();
+        break;
+      case 500:
+      case 501:
+        setError({ name: data.error.name, message: data.error.message });
+        clearError();
+        break;
+      default:
+        setError({ name: "Unknown error", message: "An unknown error occurred" });
+        clearError();
+        break;
     }
-    setUser(data.user);
-    setCookie("token", data.user.token);
-    navigate("/");
   };
 
   const handleLogout = () => {
@@ -82,7 +98,7 @@ const App = () => {
           path="/users/:username"
           element={<Account loggedInUser={user} updateUsername={updateUsername} handleLogout={handleLogout} />}
         />
-        <Route path="/books/:id" element={<Books />} />
+        <Route path="/books/:id" element={<Books user={user} />} />
       </Routes>
       <Footer />
     </div>

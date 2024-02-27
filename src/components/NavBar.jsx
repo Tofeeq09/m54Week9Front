@@ -13,6 +13,9 @@ const NavBar = ({ user, handleLogout }) => {
         <Link to="/">
           <div className="name">Bookshelf</div>
         </Link>
+        <Link to="/books" className="link-button">
+          Books
+        </Link>
         {user ? (
           <div>
             <div />

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import Container from "../components/Container";
-import LoginForm from "../components/LoginForm";
+import LogInForm from "../components/LogInForm";
 
 const Login = ({ handleLogin, error, user }) => {
   return (
@@ -8,7 +8,7 @@ const Login = ({ handleLogin, error, user }) => {
       <Container className="container">
         <h2>Login</h2>
         <p>Please enter your credentials to login.</p>
-        <LoginForm handleLogin={handleLogin} error={error} user={user} />
+        <LogInForm handleLogin={handleLogin} error={error} user={user} />
       </Container>
     </div>
   );

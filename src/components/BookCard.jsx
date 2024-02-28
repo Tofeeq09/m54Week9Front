@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { addBookToUserLibrary, removeBookFromUserLibrary } from "../utils/fetchBooks";
 
 const BookCard = ({ book, token, username }) => {
-  const [isAdded, setIsAdded] = useState(false);
+  const [isAdded, setIsAdded] = useState(null);
 
   const addBook = async () => {
     const { response, data } = await addBookToUserLibrary(token, username, book.title);
@@ -50,11 +50,12 @@ const BookCard = ({ book, token, username }) => {
       <p>{book.genre}</p>
       <p>Created at: {new Date(book.createdAt).toLocaleDateString()}</p>
       <p>Last updated: {new Date(book.updatedAt).toLocaleDateString()}</p>
-      {!isAdded ? (
-        <button onClick={addBook}>Add to library</button>
-      ) : (
-        <button onClick={removeBook}>Remove from library</button>
-      )}
+      {username &&
+        (!isAdded ? (
+          <button onClick={addBook}>Add to library</button>
+        ) : (
+          <button onClick={removeBook}>Remove from library</button>
+        ))}
     </div>
   );
 };

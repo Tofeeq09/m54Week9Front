@@ -18,7 +18,12 @@ const Books = ({ user }) => {
   return (
     <div>
       {books.map((book) => (
-        <BookCard key={book.title} book={book} token={user.token} username={user.username} />
+        <BookCard
+          key={book.title}
+          book={book}
+          token={user ? user.token : null}
+          username={user ? user.username : null}
+        />
       ))}
     </div>
   );

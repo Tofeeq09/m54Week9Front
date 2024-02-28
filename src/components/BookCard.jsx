@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { addBookToUserLibrary, removeBookFromUserLibrary } from "../utils/fetchBooks";
+import { addBookToUserLibrary, removeBookFromUserLibrary, getUserBooks } from "../utils/fetchBooks";
 
 const BookCard = ({ book, token, username }) => {
-  const [isAdded, setIsAdded] = useState(null);
+  const [isAdded, setIsAdded] = useState(false);
+
+  useEffect(() => {
+    const fetchUserBooks = async () => {
+      if (username) {
+        const userBooks = await getUserBooks(token, username);
+        setIsAdded(userBooks.some((b) => b.title === book.title));
+      }
+    };
+
+    fetchUserBooks();
+  }, [book, token, username]);
 
   const addBook = async () => {
     const { response, data } = await addBookToUserLibrary(token, username, book.title);
@@ -56,6 +68,11 @@ const BookCard = ({ book, token, username }) => {
         ) : (
           <button onClick={removeBook}>Remove from library</button>
         ))}
+      {!username && (
+        <Link to="/login" className="link-button">
+          <p>Please log in to add books to your library</p>
+        </Link>
+      )}
     </div>
   );
 };
